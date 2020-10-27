@@ -48,7 +48,11 @@ include __DIR__ . "/includes/autoloader.php"
 
             $view = new SeriesView();
             $view->showSeries($title);
+        } else {
+            $view = new SeriesView();
+            $view->showAllSeries();
         }
+
         // Create
         if (isset($_POST['submit'])) {
             $title = $_POST['title'];
@@ -63,7 +67,7 @@ include __DIR__ . "/includes/autoloader.php"
         if (isset($_POST['delete'])) {
             $id = $_POST['id'];
             $title = $_POST['title'];
-
+            $controll = new SeriesContr();
             $controll->deleteSeries($id, $title);
         }
         ?>

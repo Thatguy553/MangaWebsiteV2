@@ -2,6 +2,8 @@
 
 class Model extends Database
 {
+
+    # Display's All Series
     protected function SeriesDisplay()
     {
         try {
@@ -14,6 +16,7 @@ class Model extends Database
         }
     }
 
+    # Returns series information according to $title
     protected function SeriesSearch($title)
     {
         try {
@@ -27,6 +30,7 @@ class Model extends Database
         }
     }
 
+    # Inserts Series Data
     protected function SeriesInsert(string $title, string $description)
     {
         try {
@@ -38,6 +42,7 @@ class Model extends Database
         }
     }
 
+    # Update Series Information
     protected function SeriesUpdate(string $title = "", string $description = "", string $image = "", string $ID)
     {
         if (empty($title) && empty($description) && empty($image)) {
@@ -61,7 +66,7 @@ class Model extends Database
         }
     }
 
-
+    # Delete Series
     protected function SeriesDelete(string $id)
     {
         try {
@@ -75,6 +80,7 @@ class Model extends Database
         }
     }
 
+    # Create Chapter
     protected function ChapterInsert(string $chapterNumber, string $ChapterName, string $series)
     {
         try {
@@ -83,6 +89,71 @@ class Model extends Database
             $stmt->execute([$chapterNumber, $ChapterName, $series, "TestFolder"]);
         } catch (TypeError $error) {
             return "Chapter Insert Error: " . $error->getMessage();
+        }
+    }
+
+    # Chapter Search
+    protected function ChapterSearch(string $series)
+    {
+        try {
+            $sql = 'SELECT * FROM chapters  WHERE series = ?';
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$series]);
+            $rows = $stmt->fetchAll();
+            return $rows;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    # Update Chapter Information
+    protected function ChapterUpdate(string $number = "", string $name = "", string $ID)
+    {
+        if (empty($number) && empty($name)) {
+            return "<p>No Parameters Provieded</p>";
+            exit;
+        }
+
+        $bothSQL = 'UPDATE chapters SET chapterNumber = ?, chapterName = ? WHERE chapterUID = ?';
+        $numberSQL = 'UPDATE chapters SET chapterNumber = ? WHERE chapterUID = ?';
+        $nameSQL = 'UPDATE chapters SET chapterName = ?  WHERE chapterUID = ?';
+
+        if (!empty($number) && !empty($name)) {
+            $stmt = $this->connect()->prepare($bothSQL);
+            $stmt->execute([$number, $name, $ID]);
+        } else if (!empty($number) && !empty($name)) {
+            $stmt = $this->connect()->prepare($numberSQL);
+            $stmt->execute([$number, $ID]);
+        } else if (empty($number) && empty($name)) {
+            $stmt = $this->connect()->prepare($nameSQL);
+            $stmt->execute([$name, $ID]);
+        }
+    }
+
+    # Display's All Chapters
+    protected function ChapterDisplay()
+    {
+        try {
+            $sql = 'SELECT * FROM chapters';
+            $stmt = $this->connect()->query($sql);
+            $rows = $stmt->fetchAll();
+            return $rows;
+        } catch (TypeError $error) {
+            return "Series Display Error: " . $error->getMessage();
+        }
+    }
+
+    # Delete Chapter
+    protected function ChapterDelete(string $id)
+    {
+        try {
+            $sql = 'DELETE FROM chapters WHERE chapterUID = ?';
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$id]);
+            $success = "Deleted Successfully";
+            return $success;
+        } catch (TypeError $error) {
+            return "Series Delete Error: " . $error->getMessage();
         }
     }
 }

@@ -1,7 +1,11 @@
 <?php
 
 declare(strict_types=1);
-include __DIR__ . "/includes/autoloader.php"
+include __DIR__ . "/includes/autoloader.php";
+
+# Initialize Classes
+$controll = new Controller();
+$view = new View();
 ?>
 
 <!DOCTYPE html>
@@ -27,49 +31,71 @@ include __DIR__ . "/includes/autoloader.php"
             <button type="submit" name="submit">Submit</button>
         </form>
 
-        <form action="#" method="post" enctype="multipart/form-data">
+        <form action="#" method="post">
             <p>Searched Series</p>
             <input type="text" name="title" placeholder="Search Title..." required>
             <button type="submit" name="search">Search</button>
         </form>
 
 
-        <form action="#" method="post" enctype="multipart/form-data">
+        <form action="#" method="post">
             <p>Delete Series</p>
             <input type="number" name="id" required>
             <input type="text" name="title" placeholder="Search Title..." required>
             <button type="submit" name="delete">Delete</button>
         </form>
 
+        <form action="#" method="post" enctype="multipart/form-data">
+            <p>Create Chapter</p>
+            <input type="number" name="number" placeholder="chapter number..." required>
+
+            <input type="text" name="name" placeholder="chapter name..." required>
+
+            <select name="series">
+                <?php
+                for ($i = 0; $i < count($view->listSeries()); $i++) {
+                    echo "<option value='" . $view->listSeries()[$i]['seriesUID'] . "'>" . $view->listSeries()[$i]['seriesTitle'] . "</option>";
+                }
+                ?>
+            </select>
+
+            <input type="submit" name="cChapter">
+        </form>
+
         <?php
+
         // Display From Search
         if (isset($_POST['search'])) {
             $title = $_POST['title'];
-
-            $view = new SeriesView();
             $view->showSeries($title);
+            unset($title);
         } else {
-            $view = new SeriesView();
             $view->showAllSeries();
         }
 
-        // Create
+        // Create Chapter
         if (isset($_POST['submit'])) {
             $title = $_POST['title'];
             $description = $_POST['description'];
             $image = $_FILES['image']['name'];
-
-            $controll = new SeriesContr();
-            $controll->createSeries($title, $description, $image);
+            $controll->InsertSeries($title, $description, $image);
         }
 
-        // Delete
+        // Delete Series
         if (isset($_POST['delete'])) {
-            $id = $_POST['id'];
-            $title = $_POST['title'];
-            $controll = new SeriesContr();
-            $controll->deleteSeries($id, $title);
+            $id = $_POST['delete'];
+            $controll->DeleteSeries($id);
         }
+
+        // Create Chapter
+        if (isset($_POST['cCreate'])) {
+            $number = $_POST['number'];
+            $title = $_POST['name'];
+            $series = $_POST['series'];
+
+            $controll->InsertChapter($numer, $title, $series);
+        }
+
         ?>
     </main>
 

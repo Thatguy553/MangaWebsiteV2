@@ -1,10 +1,28 @@
 <?php
 
-class SeriesView extends Series
+class View extends Model
 {
     public function showAllSeries()
     {
-        $results = $this->displayAll();
+        $results = $this->SeriesDisplay();
+        if ($results) {
+            foreach ($results as $result) {
+                echo "Series ID: " . $result['seriesUID'] . "<br/>";
+                echo "Series Name: " . $result['seriesTitle'] . "<br/>";
+                echo "Series Description: " . $result['seriesDescription'] . "<br/>";
+                echo "<form action='#' method='post'>
+                <button type='submit' value='" . $result['seriesUID'] . "' name='delete'>Delete</button>
+                </form>";
+            }
+        } else {
+            echo "No series found.";
+        }
+    }
+
+    public function showSeries($title)
+    {
+        $results = $this->SeriesSearch($title);
+
         if ($results) {
             foreach ($results as $result) {
                 echo "Series ID: " . $result['seriesUID'] . "<br/>";
@@ -16,18 +34,15 @@ class SeriesView extends Series
         }
     }
 
-    public function showSeries($title)
+    public function listSeries()
     {
-        $results = $this->SearchSeries($title);
-
+        $list = [];
+        $results = $this->SeriesDisplay();
         if ($results) {
             foreach ($results as $result) {
-                echo "Series ID: " . $result['seriesUID'] . "<br/>";
-                echo "Series Name: " . $result['seriesTitle'] . "<br/>";
-                echo "Series Description: " . $result['seriesDescription'] . "<br/>";
+                array_push($list, $result);
             }
-        } else {
-            echo "No series found.";
         }
+        return $list;
     }
 }

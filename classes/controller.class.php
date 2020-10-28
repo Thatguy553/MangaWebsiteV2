@@ -9,6 +9,13 @@ class Controller extends Model
         exit;
     }
 
+    public function UpdateSeries($title = "", $description = "", $image = "", $ID)
+    {
+        $this->SeriesUpdate($title, $description, $image, $ID);
+        header("Location: /Learning-OOP/");
+        exit;
+    }
+
     public function DeleteSeries($id)
     {
         $this->SeriesDelete($id);

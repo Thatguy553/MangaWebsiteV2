@@ -37,14 +37,6 @@ $view = new View();
             <button type="submit" name="search">Search</button>
         </form>
 
-
-        <form action="#" method="post">
-            <p>Delete Series</p>
-            <input type="number" name="id" required>
-            <input type="text" name="title" placeholder="Search Title..." required>
-            <button type="submit" name="delete">Delete</button>
-        </form>
-
         <form action="#" method="post" enctype="multipart/form-data">
             <p>Create Chapter</p>
             <input type="number" name="number" placeholder="chapter number..." required>
@@ -68,17 +60,42 @@ $view = new View();
         if (isset($_POST['search'])) {
             $title = $_POST['title'];
             $view->showSeries($title);
-            unset($title);
         } else {
             $view->showAllSeries();
         }
 
-        // Create Chapter
+        // Create Series
         if (isset($_POST['submit'])) {
             $title = $_POST['title'];
             $description = $_POST['description'];
             $image = $_FILES['image']['name'];
             $controll->InsertSeries($title, $description, $image);
+        }
+
+        // Update Series
+        if (isset($_POST['update'])) {
+            $seriesUID = $_POST['update'];
+
+            foreach ($view->listSeries() as $row) {
+                if ($row['seriesUID'] == $seriesUID) {
+                    echo "<form action='#' method='post'>
+                    <input type='text' name='title' placeholder='" . $row['seriesTitle'] . "'>
+                    <textarea name='description' cols='30' rows='10' placeholder='" . $row['seriesDescription'] . "'></textarea>
+                    <input type='file' name='image'>
+                    <input type='hidden' name='id' value='" . $row['seriesUID'] . "'>
+                    <input type='submit' name='Usubmit'>
+                    </form>";
+                }
+            }
+        }
+
+        if (isset($_POST['Usubmit'])) {
+            $ID = $_POST['id'];
+            $title = $_POST['title'] ?? "";
+            $description = $_POST['description'] ?? "";
+            $image = $_FILES['image']['name'] ?? "";
+
+            $controll->UpdateSeries($title, $description, $image, $ID);
         }
 
         // Delete Series

@@ -38,6 +38,29 @@ class Model extends Database
         }
     }
 
+    protected function SeriesUpdate(string $title = "", string $description = "", string $image = "", string $ID)
+    {
+        if (empty($title) && empty($description) && empty($image)) {
+            return "<p>No Parameters Provieded</p>";
+            exit;
+        }
+
+        $AllCatSQL = 'UPDATE series SET seriesTitle = ?, seriesDescription = ?, seriesImage = ? WHERE seriesUID = ?';
+        $TextCatSQL = 'UPDATE series SET seriesTitle = ?, seriesDescription = ?  WHERE seriesUID = ?';
+        $ImageCatSQL = 'UPDATE series SET seriesImage = ?  WHERE seriesUID = ?';
+
+        if (!empty($title) && !empty($description) && !empty($image)) {
+            $stmt = $this->connect()->prepare($AllCatSQL);
+            $stmt->execute([$title, $description, $image, $ID]);
+        } else if (!empty($title) && !empty($description) && empty($image)) {
+            $stmt = $this->connect()->prepare($TextCatSQL);
+            $stmt->execute([$title, $description, $ID]);
+        } else if (empty($title) && empty($description) && !empty($image)) {
+            $stmt = $this->connect()->prepare($ImageCatSQL);
+            $stmt->execute([$image, $ID]);
+        }
+    }
+
 
     protected function SeriesDelete(string $id)
     {

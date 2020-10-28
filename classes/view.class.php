@@ -12,6 +12,7 @@ class View extends Model
                 echo "Series Description: " . $result['seriesDescription'] . "<br/>";
                 echo "<form action='#' method='post'>
                 <button type='submit' value='" . $result['seriesUID'] . "' name='delete'>Delete</button>
+                <button type='submit' value='" . $result['seriesUID'] . "' name='update'>Update</button>
                 </form>";
             }
         } else {
@@ -28,6 +29,10 @@ class View extends Model
                 echo "Series ID: " . $result['seriesUID'] . "<br/>";
                 echo "Series Name: " . $result['seriesTitle'] . "<br/>";
                 echo "Series Description: " . $result['seriesDescription'] . "<br/>";
+                echo "<form action='#' method='post'>
+                <button type='submit' value='" . $result['seriesUID'] . "' name='delete'>Delete</button>
+                <button type='submit' value='" . $result['seriesUID'] . "' name='update'>Update</button>
+                </form>";
             }
         } else {
             echo "No series found.";

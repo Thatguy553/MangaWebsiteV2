@@ -11,7 +11,7 @@ class Model extends Database
             $stmt = $this->connect()->query($sql);
             $rows = $stmt->fetchAll();
             return $rows;
-        } catch (TypeError $error) {
+        } catch (\Exception $error) {
             return "Series Display Error: " . $error->getMessage();
         }
     }
@@ -25,7 +25,7 @@ class Model extends Database
             $stmt->execute([$title]);
             $rows = $stmt->fetchAll();
             return $rows;
-        } catch (TypeError $error) {
+        } catch (\Exception $error) {
             return "Series Search Error: " . $error->getMessage();
         }
     }
@@ -37,7 +37,7 @@ class Model extends Database
             $sql = 'INSERT INTO series(seriesTitle, seriesDescription) VALUES(?, ?)';
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$title, $description]);
-        } catch (TypeError $error) {
+        } catch (\Exception $error) {
             return "Series Insert Error: " . $error->getMessage();
         }
     }
@@ -75,7 +75,7 @@ class Model extends Database
             $stmt->execute([$id]);
             $success = "Deleted Successfully";
             return $success;
-        } catch (TypeError $error) {
+        } catch (\Exception $error) {
             return "Series Delete Error: " . $error->getMessage();
         }
     }
@@ -87,7 +87,7 @@ class Model extends Database
             $sql = 'INSERT INTO chapters(chapterNumber, chapterName, series, chapterFolder) VALUES(?, ?, ?, ?)';
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$chapterNumber, $ChapterName, $series, "TestFolder"]);
-        } catch (TypeError $error) {
+        } catch (\Exception $error) {
             return "Chapter Insert Error: " . $error->getMessage();
         }
     }
@@ -101,7 +101,7 @@ class Model extends Database
             $stmt->execute([$series]);
             $rows = $stmt->fetchAll();
             return $rows;
-        } catch (\Throwable $th) {
+        } catch (\Exception $th) {
             throw $th;
         }
     }
@@ -138,7 +138,7 @@ class Model extends Database
             $stmt = $this->connect()->query($sql);
             $rows = $stmt->fetchAll();
             return $rows;
-        } catch (TypeError $error) {
+        } catch (\Exception $error) {
             return "Series Display Error: " . $error->getMessage();
         }
     }
@@ -152,7 +152,7 @@ class Model extends Database
             $stmt->execute([$id]);
             $success = "Deleted Successfully";
             return $success;
-        } catch (TypeError $error) {
+        } catch (\Exception $error) {
             return "Series Delete Error: " . $error->getMessage();
         }
     }
